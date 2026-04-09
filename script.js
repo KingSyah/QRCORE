@@ -282,6 +282,33 @@
 
   // Barcode download as PNG
   document.getElementById('barcode-download-png').addEventListener('click', function () {
+    barcodeToCanvas(function (canvas) {
+      triggerDownload(canvas.toDataURL('image/png'), 'barcode.png');
+    });
+  });
+
+  // Barcode download as JPG
+  document.getElementById('barcode-download-jpg').addEventListener('click', function () {
+    barcodeToCanvas(function (canvas) {
+      var jpgCanvas = document.createElement('canvas');
+      jpgCanvas.width = canvas.width;
+      jpgCanvas.height = canvas.height;
+      var ctx = jpgCanvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, jpgCanvas.width, jpgCanvas.height);
+      ctx.drawImage(canvas, 0, 0);
+      triggerDownload(jpgCanvas.toDataURL('image/jpeg', 0.95), 'barcode.jpg');
+    });
+  });
+
+  // Barcode download as PDF
+  document.getElementById('barcode-download-pdf').addEventListener('click', function () {
+    barcodeToCanvas(function (canvas) {
+      downloadAsPdf(canvas, 'barcode.pdf');
+    });
+  });
+
+  function barcodeToCanvas(callback) {
     var svg = barcodeOutput.querySelector('svg');
     if (!svg) return;
 
@@ -291,21 +318,19 @@
 
     var img = new Image();
     img.onload = function () {
-      var canvas = document.createElement('canvas');
-      // Scale up for crisp output
       var scale = 3;
+      var canvas = document.createElement('canvas');
       canvas.width = img.width * scale;
       canvas.height = img.height * scale;
       var ctx = canvas.getContext('2d');
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      triggerDownload(canvas.toDataURL('image/png'), 'barcode.png');
       URL.revokeObjectURL(url);
+      callback(canvas);
     };
     img.src = url;
-  });
+  }
 
   // =============================================
   // SHARED HELPERS
@@ -319,7 +344,8 @@
     document.body.removeChild(link);
   }
 
-  function downloadAsPdf(canvas) {
+  function downloadAsPdf(canvas, filename) {
+    filename = filename || 'qrcode.pdf';
     var jsPDF = window.jspdf ? window.jspdf.jsPDF : null;
     if (!jsPDF) {
       qrError.textContent = 'PDF library not loaded. Please refresh and try again.';
@@ -340,7 +366,7 @@
     var x = ((pdfW + 20) - pdfW) / 2;
     var y = ((pdfH + 20) - pdfH) / 2;
     doc.addImage(imgData, 'PNG', x, y, pdfW, pdfH);
-    doc.save('qrcode.pdf');
+    doc.save(filename);
   }
 
   // =============================================

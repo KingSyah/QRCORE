@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR & Barcode Generator</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📲</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📲 QR & Barcode Generator</h1>
+      <p class="subtitle">Generate QR codes and barcodes instantly in your browser ✨</p>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="tabs" role="tablist">
+      <button class="tab active" role="tab" aria-selected="true" data-tab="qr">QR Code</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="barcode">Barcode</button>
+    </nav>
+
+    <main>
+      <!-- ===== QR CODE TAB ===== -->
+      <section id="panel-qr" class="tab-panel active" role="tabpanel">
+        <div class="input-section">
+          <label for="qr-input">Text or URL</label>
+          <textarea
+            id="qr-input"
+            placeholder="Enter text or URL..."
+            rows="3"
+            maxlength="2000"
+          ></textarea>
+          <span id="qr-char-count" class="char-count">0 / 2000</span>
+          <p id="qr-error" class="error" aria-live="polite"></p>
+        </div>
+
+        <section class="options-section">
+          <div class="option-group">
+            <label for="qr-size">Size</label>
+            <select id="qr-size">
+              <option value="150">Small — 150px</option>
+              <option value="200" selected>Medium — 200px</option>
+              <option value="300">Large — 300px</option>
+            </select>
+          </div>
+
+          <div class="option-group">
+            <label for="qr-fg">QR Color</label>
+            <div class="color-input-wrap">
+              <input type="color" id="qr-fg" value="#1a1a2e">
+              <span id="qr-fg-hex">#1a1a2e</span>
+            </div>
+          </div>
+
+          <div class="option-group">
+            <label for="qr-bg">Background</label>
+            <div class="color-input-wrap">
+              <input type="color" id="qr-bg" value="#ffffff">
+              <span id="qr-bg-hex">#ffffff</span>
+            </div>
+          </div>
+        </section>
+
+        <button id="qr-generate-btn" class="btn btn-primary">Generate QR Code</button>
+
+        <div id="qr-result" class="result-section hidden">
+          <div id="qr-output" class="qr-output"></div>
+          <div class="download-group">
+            <button id="qr-download-png" class="btn btn-secondary">⬇ PNG</button>
+            <button id="qr-download-jpg" class="btn btn-secondary">⬇ JPG</button>
+            <button id="qr-download-pdf" class="btn btn-secondary">⬇ PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BARCODE TAB ===== -->
+      <section id="panel-barcode" class="tab-panel" role="tabpanel">
+        <div class="input-section">
+          <label for="barcode-input">Value</label>
+          <input
+            type="text"
+            id="barcode-input"
+            placeholder="Enter number or text..."
+            maxlength="50"
+            autocomplete="off"
+          >
+          <span id="barcode-hint" class="hint">EAN-13: enter exactly 13 digits</span>
+          <p id="barcode-error" class="error" aria-live="polite"></p>
+        </div>
+
+        <section class="options-section options-barcode">
+          <div class="option-group">
+            <label for="barcode-type">Format</label>
+            <select id="barcode-type">
+              <option value="EAN13">EAN-13 (default)</option>
+              <option value="CODE128">Code 128</option>
+            </select>
+          </div>
+
+          <div class="option-group">
+            <label for="barcode-width">Bar Width</label>
+            <select id="barcode-width">
+              <option value="1">Thin</option>
+              <option value="2" selected>Medium</option>
+              <option value="3">Thick</option>
+            </select>
+          </div>
+
+          <div class="option-group">
+            <label for="barcode-height">Height</label>
+            <select id="barcode-height">
+              <option value="40">Short</option>
+              <option value="60" selected>Medium</option>
+              <option value="100">Tall</option>
+            </select>
+          </div>
+        </section>
+
+        <button id="barcode-generate-btn" class="btn btn-primary">Generate Barcode</button>
+
+        <div id="barcode-result" class="result-section hidden">
+          <div id="barcode-output" class="barcode-output"></div>
+          <div class="download-group">
+            <button id="barcode-download-png" class="btn btn-secondary">⬇ PNG</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- COPYRIGHT FOOTER -->
+    <div class="footer">
+      <div class="footer-inner">
+        <span class="footer-crown">👑</span>
+        <span class="footer-text" id="copyright-text"></span>
+        <span class="footer-crown">👑</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

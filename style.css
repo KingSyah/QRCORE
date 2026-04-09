@@ -279,25 +279,12 @@ input[type="color"]::-moz-color-swatch {
   gap: 0.5rem;
   padding: 0.5rem 1.25rem;
   border-radius: 999px;
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1.5px solid transparent;
-  background-clip: padding-box;
-  position: relative;
-}
-
-.footer-inner::before {
-  content: '';
-  position: absolute;
-  inset: -1.5px;
-  border-radius: 999px;
-  padding: 1.5px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--green));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+  background: var(--clr-surface);
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--clr-surface), var(--clr-surface)),
+                    linear-gradient(135deg, var(--accent), var(--accent2), var(--green));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
 }
 
 .footer-crown {
@@ -322,6 +309,11 @@ input[type="color"]::-moz-color-swatch {
   animation: shimmer 3s linear infinite;
 }
 
+@keyframes shimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
 /* Animations */
 @keyframes fadeUp {
   from {
@@ -339,10 +331,7 @@ input[type="color"]::-moz-color-swatch {
   50%      { transform: translateY(-2px) rotate(5deg); }
 }
 
-@keyframes shimmer {
-  0%   { background-position: 0% center; }
-  100% { background-position: 200% center; }
-}
+
 
 /* Responsive */
 @media (max-width: 400px) {
